@@ -16,3 +16,5 @@ class User(db.Model):
         lazy=True,
         cascade="all, delete-orphan",
     )
+
+    team_id = db.Column(db.Integer, db.ForeignKey("teams.id"), nullable=False)
