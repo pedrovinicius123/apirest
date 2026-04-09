@@ -1,12 +1,11 @@
 from flask import Flask
 from marshmallow import ValidationError
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, BadRequest, Conflict
 
 from .config import Config
 from .extensions import db, ma, migrate
 from .routes.messages import messages_bp
 from .routes.users import users_bp
-
 
 def create_app():
     app = Flask(__name__)
@@ -21,6 +20,7 @@ def create_app():
 
     app.register_blueprint(messages_bp, url_prefix="/messages")
     app.register_blueprint(users_bp, url_prefix="/users")
+    app.register_blueprint()
 
     @app.errorhandler(ValidationError)
     def handle_validation_error(err):
@@ -33,5 +33,14 @@ def create_app():
     @app.errorhandler(404)
     def handle_404(err):
         return {"success": False, "message": "Rota nao encontrada"}, 404
+    
+    @app.errorhandler(BadRequest)
+    def handle_bad_request(err):
+        return {"sucess": False, "message": err.messages}, 400
+    
+    @app.errorhandler(BadRequest)
+    def handle_conflict(err):
+        return {"sucess": False, "message": err.messages}, 409
+
 
     return app

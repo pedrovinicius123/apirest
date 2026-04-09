@@ -9,8 +9,10 @@ class UserSchema(ma.SQLAlchemySchema):
         model = User
 
     id = ma.auto_field(dump_only=True)
+    idade = ma.auto_field(required=True, validate=validate.Range(min=1, max=130))
     nome = ma.auto_field(required=True)
     email = fields.Email(required=True)
+    team_id = ma.auto_field(required=True)
     senha = fields.String(
         required=True,
         load_only=True,
