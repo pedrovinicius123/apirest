@@ -14,16 +14,15 @@ user_schema = UserSchema()
 
 def add_team():
     data = request.json
+    print(data)
     team = team_schema.load(data)
+    print(team)
 
     db.session.add(team)
     db.session.commit()
     return success_response(data=team_schema.dump(team), status=201)
 
-def delete_team():
-    id = request.args.get("id")
-    if not id:
-        raise BadRequest("ID key not provided")
+def delete_team(id:int):
     team = Team.query.get_or_404(id)
 
     db.session.delete(team)
@@ -42,10 +41,7 @@ def update_team():
     return success_response(data=team_schema.dump(team))
 
 
-def get_team():
-    id=request.args.get("id")
-    if not id:
-        raise BadRequest("ID key not provided")
+def get_team(id:int):
     team = Team.query.get_or_404(id)
     return success_response(data=team_schema.dump(team))
     
@@ -53,15 +49,6 @@ def get_team():
 def get_all_teams():
     teams = Team.query.all()
     return success_response(data=teams_schema.dump(teams))
-
-def add_participants_to_team():
-    data = request.json
-    participant = User(**data)
-
-    db.session.add(participant)
-    db.session.commit()
-
-    return success_response(data=user_schema.dump(participant), status=201)
 
 def get_all_participants():
     parts = User.query.all()
@@ -73,4 +60,4 @@ def get_all_team_components(id:int):
     team = Team.query.get_or_404(id)
     users = users_schemas.dump(team.participants)
 
-    return  success_response(data=users)
+    return success_response(data=users)

@@ -6,6 +6,7 @@ from .config import Config
 from .extensions import db, ma, migrate
 from .routes.messages import messages_bp
 from .routes.users import users_bp
+from .routes.teams import bp_teams
 
 def create_app():
     app = Flask(__name__)
@@ -20,7 +21,7 @@ def create_app():
 
     app.register_blueprint(messages_bp, url_prefix="/messages")
     app.register_blueprint(users_bp, url_prefix="/users")
-    app.register_blueprint()
+    app.register_blueprint(bp_teams, url_prefix="/teams")
 
     @app.errorhandler(ValidationError)
     def handle_validation_error(err):

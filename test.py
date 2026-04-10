@@ -18,6 +18,8 @@ def print_result(name, success):
 def test_create_user():
     r = requests.post(f"{BASE_URL}/users", json={
         "nome": "Teste",
+        "idade": 18,
+        "team_id": 1, 
         "email": "teste@email.com",
         "senha": "123456"
     })
@@ -78,6 +80,7 @@ def test_messages_by_user(user_id):
 def test_update_user(user_id):
     r = requests.patch(f"{BASE_URL}/users/{user_id}", json={
         "nome": "Atualizado"
+        "idade"
     })
     ok = r.status_code == 200
     print_result("Atualizar usuário", ok)
@@ -107,11 +110,21 @@ def test_404():
     ok = r.status_code == 404
     print_result("Rota inexistente", ok)
 
+def test_create_team():
+    r = requests.post(f'{BASE_URL}/teams', json={"name": "EQUIPE DE TESTE 4"})
+    ok = r.status_code == 201
+    return print_result("Criação de equipe", ok)
+
+def test_delete_team():
+    r = requests.delete(f"{BASE_URL}/teams/1")
+    ok = r.status_code == 200
+    return print_result("Deletar equipe", ok)
 
 # 🚀 Execução
 
 print("\n🚀 Iniciando testes (User + Message)...\n")
 
+test_create_team()
 user_id = test_create_user()
 
 test_list_users()
@@ -129,4 +142,5 @@ test_404()
 if user_id:
     test_delete_user(user_id)
 
+test_delete_team()
 print(f"\n🎯 Pontuação final: {score}/30\n")

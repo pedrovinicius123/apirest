@@ -68,6 +68,8 @@ def unique_user_payload():
     stamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
     return {
         "nome": "Teste API",
+        "team_id": 1,
+        "idade": 18,
         "email": f"teste_{stamp}@email.com",
         "senha": "123456",
     }
@@ -176,6 +178,26 @@ def test_list_messages(expected_message_id):
     )
     print_result("Listar mensagens", ok, "mensagem criada nao encontrada")
 
+def test_create_team():
+    data = expect_json_response(
+        name="Criar equipe",
+        method="POST",
+        path=f"/teams",
+        expected_status=201,
+        json={
+            "name": "Teste 1"
+        }
+    )
+
+    if not data:
+        return 
+    
+    messages = data.get("data")
+    ok = (
+        data.get("success") is True
+        and isinstance(messages, dict)
+    )
+    return print_result("Criar equipe", ok, "Equipe criada com sucesso")
 
 def test_messages_by_user(user_id, expected_message_id):
     data = expect_json_response(
@@ -294,6 +316,7 @@ def main():
         test_messages_by_user(user_id, message_id)
         test_list_messages(message_id)
 
+    test_create_team()
     test_update_user(user_id)
     test_invalid_user_message()
     test_validation()
