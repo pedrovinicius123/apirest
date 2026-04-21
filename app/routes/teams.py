@@ -4,7 +4,7 @@ from ..controllers.teams_controller import (
     delete_team,
     update_team,
     get_team,
-    get_all_teams,
+    get_all_teams as gat,
     get_all_team_components
 )
 
@@ -12,7 +12,7 @@ bp_teams = Blueprint("teams", __name__)
 
 @bp_teams.route("/", methods=["GET"])
 def get_all_teams():
-    return get_all_teams()
+    return gat()
 
 @bp_teams.route("/", methods=["POST"])
 def add_team_to_db():
@@ -20,7 +20,7 @@ def add_team_to_db():
 
 @bp_teams.route("/<int:id>/participants", methods=["GET"])
 def get_team_participants(id:int):
-    return get_all_team_components()
+    return get_all_team_components(id)
 
 @bp_teams.route("/<int:id>", methods=["GET"])
 def get_team_by_id(id:int):

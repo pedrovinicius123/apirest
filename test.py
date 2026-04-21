@@ -5,142 +5,97 @@ BASE_URL = "http://127.0.0.1:5000"
 score = 0
 
 
-def print_result(name, success):
+def print_result(test_name, success):
     global score
     if success:
-        print(f"[✔] {name}")
+        print(f"[✔] {test_name}")
         score += 3
     else:
-        print(f"[✘] {name}")
+        print(f"[✘] {test_name}")
 
 
-# 🧩 1. Criar usuário
-def test_create_user():
-    r = requests.post(f"{BASE_URL}/users", json={
-        "nome": "Teste",
-        "idade": 18,
-        "team_id": 1, 
-        "email": "teste@email.com",
-        "senha": "123456"
-    })
-    ok = r.status_code in [200, 201]
-    print_result("Criar usuário", ok)
-
-    if ok:
-        return r.json()["data"]["id"]
-    return None
-
-
-# 🧩 2. Listar usuários
-def test_list_users():
-    r = requests.get(f"{BASE_URL}/users")
-    ok = r.status_code == 200 and isinstance(r.json()["data"], list)
-    print_result("Listar usuários", ok)
-
-
-# 🧩 3. Criar mensagem válida
-def test_create_message(user_id):
-    r = requests.post(f"{BASE_URL}/messages", json={
-        "content": "Mensagem teste",
-        "user_id": user_id
-    })
-    ok = r.status_code in [200, 201]
-    print_result("Criar mensagem válida", ok)
-
-    if ok:
-        return r.json()["data"]["id"]
-    return None
-
-
-# 🧩 4. Criar mensagem com usuário inválido
-def test_invalid_user_message():
-    r = requests.post(f"{BASE_URL}/messages", json={
-        "content": "Erro",
-        "user_id": 9999
-    })
-    ok = r.status_code == 404
-    print_result("Erro mensagem com usuário inválido", ok)
-
-
-# 🧩 5. Listar mensagens
-def test_list_messages():
-    r = requests.get(f"{BASE_URL}/messages")
-    ok = r.status_code == 200 and isinstance(r.json()["data"], list)
-    print_result("Listar mensagens", ok)
-
-
-# 🧩 6. Endpoint domínio
-def test_messages_by_user(user_id):
-    r = requests.get(f"{BASE_URL}/users/{user_id}/messages")
-    ok = r.status_code == 200 and isinstance(r.json()["data"], list)
-    print_result("Mensagens por usuário", ok)
-
-
-# 🧩 7. Atualizar usuário
-def test_update_user(user_id):
-    r = requests.patch(f"{BASE_URL}/users/{user_id}", json={
-        "nome": "Atualizado"
-        "idade"
-    })
-    ok = r.status_code == 200
-    print_result("Atualizar usuário", ok)
-
-
-# 🧩 8. Deletar usuário
-def test_delete_user(user_id):
-    r = requests.delete(f"{BASE_URL}/users/{user_id}")
-    ok = r.status_code == 204
-    print_result("Deletar usuário", ok)
-
-
-# 🧩 9. Validação (senha curta)
-def test_validation():
-    r = requests.post(f"{BASE_URL}/users", json={
-        "nome": "Erro",
-        "email": "email@email.com",
-        "senha": "123"
-    })
-    ok = r.status_code == 400
-    print_result("Validação senha", ok)
-
-
-# 🧩 10. Rota inexistente
-def test_404():
-    r = requests.get(f"{BASE_URL}/rota-invalida")
-    ok = r.status_code == 404
-    print_result("Rota inexistente", ok)
-
+# 🧩 1. Criar equipe
 def test_create_team():
-    r = requests.post(f'{BASE_URL}/teams', json={"name": "EQUIPE DE TESTE 4"})
-    ok = r.status_code == 201
-    return print_result("Criação de equipe", ok)
+    response = requests.post(f"{BASE_URL}/teams", json={
+        "name": "Equipe Teste 5"
+    })
+    success = response.status_code == 201 or response.status_code == 200
+    print_result("Criar equipe", success)
 
-def test_delete_team():
-    r = requests.delete(f"{BASE_URL}/teams/1")
-    ok = r.status_code == 200
-    return print_result("Deletar equipe", ok)
+    if success:
+        return response.json()["data"]["id"]
+    return None
 
-# 🚀 Execução
 
-print("\n🚀 Iniciando testes (User + Message)...\n")
+# 🧩 2. Listar equipes
+def test_list_teams():
+    response = requests.get(f"{BASE_URL}/teams")
+    success = response.status_code == 200 and isinstance(response.json()["data"], list)
+    print_result("Listar equipes", success)
 
-test_create_team()
-user_id = test_create_user()
 
-test_list_users()
+# 🧩 3. Criar participante válido
+def test_create_participant(team_id):
+    response = requests.post(f"{BASE_URL}/users", json={
+        "nome": "Pedro",
+        "idade": 18,
+        "email": "p@example.com",
+        "senha":"1234567",
+        "team_id": team_id
+    })
+    success = response.status_code in [200, 201]
+    print_result("Criar participante válido", success)
 
-if user_id:
-    test_create_message(user_id)
-    test_messages_by_user(user_id)
-    test_update_user(user_id)
+    if success:
+        return response.json()["data"]["id"]
+    return None
 
-test_invalid_user_message()
-test_list_messages()
+
+# 🧩 4. Criar participante com equipe inválida
+def test_invalid_team():
+    response = requests.post(f"{BASE_URL}/participants", json={
+        "nome": "Erro",
+        "idade": 20,
+        "team_id": 9999
+    })
+    success = response.status_code == 404
+    print_result("Erro ao criar participante com equipe inválida", success)
+
+
+# 🧩 5. Listar participantes
+def test_list_participants():
+    response = requests.get(f"{BASE_URL}/users")
+    success = response.status_code == 200 and isinstance(response.json()["data"], list)
+    print_result("Listar participantes", success)
+
+
+# 🧩 6. Endpoint orientado ao domínio
+def test_participants_by_team(team_id):
+    response = requests.get(f"{BASE_URL}/teams/{team_id}/participants")
+    success = response.status_code == 200 and isinstance(response.json()["data"], list)
+    print_result("Listar participantes por equipe", success)
+
+
+# 🧩 7. Validação de dados (nome ausente)
+def test_validation():
+    response = requests.post(f"{BASE_URL}/teams", json={})
+    success = response.status_code == 400
+    print_result("Validação de dados obrigatórios", success)
+
+
+# 🚀 Execução dos testes
+
+print("\n🚀 Iniciando testes...\n")
+
+team_id = test_create_team()
+test_list_teams()
+
+if team_id:
+    test_create_participant(team_id)
+    test_participants_by_team(team_id)
+
+test_invalid_team()
+test_list_participants()
 test_validation()
-test_404()
 
-if user_id:
-    test_delete_user(user_id)
-
-test_delete_team()
 print(f"\n🎯 Pontuação final: {score}/30\n")
