@@ -21,7 +21,7 @@ def test_create_user():
         "idade": 18,
         "team_id": 1, 
         "email": "teste@email.com",
-        "senha": "123456"
+        "senha_hash": "123456"
     })
     ok = r.status_code in [200, 201]
     print_result("Criar usuário", ok)

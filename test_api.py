@@ -71,7 +71,7 @@ def unique_user_payload():
         "team_id": 1,
         "idade": 18,
         "email": f"teste_{stamp}@email.com",
-        "senha": "123456",
+        "senha_hash": "123456",
     }
 
 

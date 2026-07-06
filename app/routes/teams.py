@@ -30,6 +30,6 @@ def get_team_by_id(id:int):
 def delete_team_by_id(id:int):
     return delete_team(id)
 
-@bp_teams.route("/<int:id>")
+@bp_teams.route("/<int:id>", methods=["PATCH"])
 def update_team_id(id:int):
     return update_team(id)

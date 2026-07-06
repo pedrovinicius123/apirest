@@ -14,13 +14,13 @@ user_schema = UserSchema()
 
 def add_team():
     data = request.json
-    print(data)
+    print("TEAM", data)
     team = team_schema.load(data)
-    print(team)
+    print("TEAM", team)
 
     db.session.add(team)
     db.session.commit()
-    return success_response(data=team_schema.dump(team), status=201)
+    return success_response(data=team_schema.dumps(team), status=201)
 
 def delete_team(id:int):
     team = Team.query.get_or_404(id)
@@ -32,7 +32,8 @@ def delete_team(id:int):
 def update_team():
     data = request.json
     team = Team.query.get_or_404(data["id"])
-
+    
+    print(data)
     for k, v in data.items():
         if k in team.__dict__:
             setattr(team, k, v)

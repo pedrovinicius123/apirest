@@ -6,6 +6,7 @@ class TeamSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Team
         load_instance=True
+        fields = ("id", "name", "participants")
 
     id = ma.auto_field(dump_only=True)
     name = ma.auto_field(required=True)

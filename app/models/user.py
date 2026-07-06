@@ -8,7 +8,7 @@ class User(db.Model):
     idade = db.Column(db.Integer, nullable=False)
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    senha = db.Column(db.String(255), nullable=False)
+    senha_hash = db.Column(db.String(255), nullable=False)
     admin = db.Column(db.Boolean, default=False)
 
     messages = db.relationship(

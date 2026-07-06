@@ -3,7 +3,7 @@ from marshmallow import ValidationError
 from werkzeug.exceptions import NotFound, BadRequest, Conflict
 
 from .config import Config
-from .extensions import db, ma, migrate
+from .extensions import db, ma, migrate, auth, login_manager
 from .routes.messages import messages_bp
 from .routes.users import users_bp
 from .routes.teams import bp_teams
@@ -16,6 +16,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     ma.init_app(app)
+    login_manager.init_app(app)
 
     from .models import message, user  # noqa: F401
 
