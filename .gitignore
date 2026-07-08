@@ -1,4 +1,5 @@
 # Ambiente virtual
+.env
 venv/
 .venv/
 
@@ -17,3 +18,6 @@ __pycache__/
 # Editor/IDE
 .vscode/
 .idea/
+
+# Tests
+tests

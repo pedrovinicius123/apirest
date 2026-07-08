@@ -2,8 +2,9 @@ from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flask_httpauth import HTTPTokenAuth
+from flask_jwt_extended import JWTManager, create_access_token, set_access_cookies, unset_jwt_cookies
 from sqlalchemy import MetaData
+
 
 metadata = MetaData(
     naming_convention={
@@ -19,4 +20,4 @@ db=SQLAlchemy(metadata=metadata)
 migrate = Migrate()
 ma = Marshmallow()
 login_manager= LoginManager()
-auth = HTTPTokenAuth()
+auth = JWTManager()
