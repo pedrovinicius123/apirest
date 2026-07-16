@@ -1,4 +1,5 @@
 from flask import Blueprint
+from flask_jwt_extended import jwt_required
 from ..controllers.teams_controller import (
     add_team,
     delete_team,
@@ -15,6 +16,7 @@ def get_all_teams():
     return gat()
 
 @bp_teams.route("/", methods=["POST"])
+@jwt_required()
 def add_team_to_db():
     return add_team()
 
@@ -27,9 +29,12 @@ def get_team_by_id(id:int):
     return get_team(id)
 
 @bp_teams.route("/<int:id>", methods=["DELETE"])
+@jwt_required()
 def delete_team_by_id(id:int):
     return delete_team(id)
 
 @bp_teams.route("/<int:id>", methods=["PATCH"])
+@jwt_required()
 def update_team_id(id:int):
     return update_team(id)
+    

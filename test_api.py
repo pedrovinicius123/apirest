@@ -189,10 +189,12 @@ def test_create_team():
         }
     )
 
+    print(data)
     if not data:
         return 
     
     messages = data.get("data")
+    
     ok = (
         data.get("success") is True
         and isinstance(messages, dict)

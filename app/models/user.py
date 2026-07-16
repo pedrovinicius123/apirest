@@ -5,6 +5,8 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey("teams.id"), nullable=False)
+
     idade = db.Column(db.Integer, nullable=False)
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -18,4 +20,4 @@ class User(db.Model):
         cascade="all, delete-orphan",
     )
 
-    team_id = db.Column(db.Integer, db.ForeignKey("teams.id"), nullable=False)
+   

@@ -1,6 +1,7 @@
 from marshmallow import fields, validates, ValidationError
 from ..extensions import ma
 from ..models.team import Team
+from .user_schema import UserSchema
 
 class TeamSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -10,7 +11,7 @@ class TeamSchema(ma.SQLAlchemyAutoSchema):
 
     id = ma.auto_field(dump_only=True)
     name = ma.auto_field(required=True)
-    participants = fields.Nested("UserSchema", only=("id", "nome"))
+    participants = ma.Nested(UserSchema, many=True, exclude=("team_id",))
 
     @validates("name")
     def validate_unique_team_name(self, value, **kwargs):

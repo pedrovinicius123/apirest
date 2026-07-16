@@ -26,7 +26,7 @@ def listar_usuarios():
     return success_response(users_schema.dump(usuarios))
 
 def mostrar_usuario(id:int):
-    user = User.query.get(id)
+    user = User.query.get_or_404(id)
     return success_response({k:v for k,v in user.__dict__.items() if k in ["id", "nome", "idade", "email", "admin"]})
 
 def _build_auth_response(user, status_code=200):
@@ -49,8 +49,9 @@ def criar_usuario(data):
     dados_validados["senha_hash"] = generate_password_hash(dados_validados.get("senha_hash"))
     novo_usuario = User(**dados_validados)
 
-    db.session.add(novo_usuario)
-    db.session.commit()
+    if not User.query.filter_by(email=novo_usuario.email).first():
+        db.session.add(novo_usuario)
+        db.session.commit()
 
     return _build_auth_response(novo_usuario, 201)
 

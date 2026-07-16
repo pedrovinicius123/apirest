@@ -19,7 +19,12 @@ def create_app():
     login_manager.init_app(app)
     auth.init_app(app)
 
-    from .models import message, user  # noqa: F401
+    with app.app_context():
+        from .models.message import Message
+        from .models.team import Team
+        from .models.user import User
+
+        db.create_all()
 
     app.register_blueprint(messages_bp, url_prefix="/messages")
     app.register_blueprint(users_bp, url_prefix="/users")

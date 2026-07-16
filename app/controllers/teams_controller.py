@@ -14,9 +14,7 @@ user_schema = UserSchema()
 
 def add_team():
     data = request.json
-    print("TEAM", data)
     team = team_schema.load(data)
-    print("TEAM", team)
 
     db.session.add(team)
     db.session.commit()
@@ -32,8 +30,7 @@ def delete_team(id:int):
 def update_team():
     data = request.json
     team = Team.query.get_or_404(data["id"])
-    
-    print(data)
+
     for k, v in data.items():
         if k in team.__dict__:
             setattr(team, k, v)
@@ -60,5 +57,6 @@ def get_all_participants():
 def get_all_team_components(id:int):
     team = Team.query.get_or_404(id)
     users = users_schemas.dump(team.participants)
+    print(users)
 
     return success_response(data=users)
