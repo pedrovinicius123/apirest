@@ -18,7 +18,7 @@ def add_team():
 
     db.session.add(team)
     db.session.commit()
-    return success_response(data=team_schema.dumps(team), status=201)
+    return success_response(data=team_schema.dump(team), status=201)
 
 def delete_team(id:int):
     team = Team.query.get_or_404(id)

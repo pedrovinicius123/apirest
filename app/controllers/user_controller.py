@@ -78,7 +78,6 @@ def deletar_usuario(id):
     return success_response(
         {
             "msg": "User deleted"
-            ""
         }
     )
 
